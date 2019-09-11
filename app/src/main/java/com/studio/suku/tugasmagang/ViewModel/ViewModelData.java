@@ -5,7 +5,8 @@ import android.util.Log;
 import com.studio.suku.tugasmagang.Model.RequestData;
 import com.studio.suku.tugasmagang.Model.ResultData;
 
-import androidx.lifecycle.LiveData;
+import java.util.List;
+
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import retrofit2.Call;
@@ -16,19 +17,18 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ViewModelData extends ViewModel  {
 
-    private static final String BASE_URL = "https://info-malang-batu.firebaseapp.com";
-    private static MutableLiveData<ResultData> data;
+    private static final String BASE_URL = "https://info-malang-batu.firebaseapp.com/";
+    private MutableLiveData<List<ResultData>> liveData;
 
-    public LiveData<ResultData> getAllData(){
+    public MutableLiveData<List<ResultData>> getAllData(){
         //Check dulu MutableLiveData nya
-        if (data == null){
-            data = new MutableLiveData<ResultData>();
+        if (liveData == null){
+            liveData = new MutableLiveData<List<ResultData>>();
             setLiveData();
         }
-        return data;
+        return liveData;
     }
-
-    private static void setLiveData(){
+    private void setLiveData(){
         //Make a request here
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
@@ -36,20 +36,20 @@ public class ViewModelData extends ViewModel  {
                 .build();
 
         RequestData requestData = retrofit.create(RequestData.class);
-        Call<ResultData>call =requestData.getAllData();
-
-        call.enqueue(new Callback<ResultData>() {
+        Call<List<ResultData>> call =requestData.getAllData();
+        call.enqueue(new Callback<List<ResultData>>() {
             @Override
-            public void onResponse(Call<ResultData> call, Response<ResultData> response) {
-                data.setValue(response.body());
-                Log.d("Datanya", response.body().getCaption());
+            public void onResponse(Call<List<ResultData>> call, Response<List<ResultData>> response) {
+                Log.d("Datanya", response.body().get(0).getCaption());
+                liveData.setValue(response.body());
             }
 
             @Override
-            public void onFailure(Call<ResultData> call, Throwable t) {
-                Log.d("Ada Error", t.getMessage());
+            public void onFailure(Call<List<ResultData>> call, Throwable t) {
+                Log.e("Ada Error", t.getMessage());
             }
         });
+
     }
 
 }

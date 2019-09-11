@@ -1,6 +1,12 @@
 package com.studio.suku.tugasmagang.Model;
 
-public class ResultData {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
+public class ResultData implements Parcelable {
 
 
     /**
@@ -9,8 +15,14 @@ public class ResultData {
      * image : https://lh3.googleusercontent.com/dW9YPpwziNIVhrxwJ7hMVJg2t1BUbx-33inyqljfEW_GvZFbniFX07n6YcOi9FZvhaU2ZUt-AW1NRsdk3YRw6Uj6Qqk0giNmSfTbZ0IhILDTPxxa9XAA3K9ba9ncvKH2U_CRA7Vl9VzKylD0RinJJElQtHLtXAIFHBlCZC5m9yDnBKztF7OWfexQvS-perMGvqgZy1j6V3_Q_b3lsZUNIHsQDFvvxK9U3kF1c52MqJaR-0RboiFfohpfYV9VgegvLM9TXkNtM4gl3TP1ZtyXizJe7AtQVUloZSAfN5FN9oSiveIDPQX_QG0tEGD66N5tt4bsm-VHxZNyyHAj1tfm40tr2frGFElOoBLDEk6-l-JhOKNckBc9zaMEi1sE6Mw-o91DWY3p2wxqg6ygtdHHwhkl7ya-oUG5BZ8tG7NJjC6XyB45dSdG7QaiK1f1L_pew3ZPKx5WXGPW2pBA_Z37xFiwaPpIDVR628VOXgs3FB-9qAnr3hS_czWTf4Kz0GBQ8FGkfj5oW67XHPzicJJ9gmGHYuWJmanP2TirbP6MqGQ4kKAnAGi5VRkAmR0vmIOJpJYAvgmxbBfG-_MzoIyUBrjCsN07e-ZJFp3Vy22NWXBhKc1wNdLRuU78aTs8gVULOLW8l_8oqLjrstdQcBMsVmE_BgRVtcA=w855-h641-no
      */
 
+    @SerializedName("caption")
+    @Expose
     private String caption;
+    @SerializedName("thumbnail")
+    @Expose
     private String thumbnail;
+    @SerializedName("image")
+    @Expose
     private String image;
 
     public String getCaption() {
@@ -36,4 +48,37 @@ public class ResultData {
     public void setImage(String image) {
         this.image = image;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.caption);
+        dest.writeString(this.thumbnail);
+        dest.writeString(this.image);
+    }
+
+    public ResultData() {
+    }
+
+    private ResultData(Parcel in) {
+        this.caption = in.readString();
+        this.thumbnail = in.readString();
+        this.image = in.readString();
+    }
+
+    public static final Parcelable.Creator<ResultData> CREATOR = new Parcelable.Creator<ResultData>() {
+        @Override
+        public ResultData createFromParcel(Parcel source) {
+            return new ResultData(source);
+        }
+
+        @Override
+        public ResultData[] newArray(int size) {
+            return new ResultData[size];
+        }
+    };
 }

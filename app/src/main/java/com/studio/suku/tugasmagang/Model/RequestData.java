@@ -1,5 +1,7 @@
 package com.studio.suku.tugasmagang.Model;
 
+import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.http.GET;
 
@@ -10,6 +12,6 @@ public interface RequestData {
     //Ataupun Header yang mau dikirim
 
     @GET("Gallery_Malang_Batu.json")
-    Call<ResultData> getAllData();
+    Call<List<ResultData>> getAllData();
 
 }
